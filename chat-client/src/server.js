@@ -19,7 +19,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use('/static', express.static(webRoot));
 
-app.get('*', async (req: express.Request, res: express.Response) => {
+app.get('*', async (req, res) => {
   const assets = await loadCachedAssets(join(webRoot, 'webpack-assets.json'));
   const networkInterface = createNetworkInterface({ uri: 'http://127.0.0.1' });
 
@@ -45,7 +45,7 @@ app.get('*', async (req: express.Request, res: express.Response) => {
     if (context.url) {
       res.redirect(302, context.url);
     } else {
-      // const styles: string = styleSheet.rules().map((rule: TStyleSheetRule) => rule.cssText).join('\n');
+      // const styles = styleSheet.rules().map((rule: TStyleSheetRule) => rule.cssText).join('\n');
       res.send(renderHtml('', client.store, assets, html));
     }
   } catch (err) {

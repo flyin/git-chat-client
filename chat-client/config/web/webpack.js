@@ -18,8 +18,9 @@ module.exports = env => {
     cache: true,
     target: 'web',
     context: resolve(__dirname),
-    devtool: false,
+    devtool: isProduction ? false : 'eval',
     stats: { colors: true },
+
     entry: {
       bundle: [
         ...!isProduction ? ['react-hot-loader/patch', `webpack-hot-middleware/client?path=http://${hostname}:${port}/__webpack_hmr`] : [],
@@ -59,6 +60,9 @@ module.exports = env => {
     },
 
     plugins: [
+      new webpack.optimize.OccurrenceOrderPlugin(),
+      new LodashModuleReplacementPlugin(),
+
       new CleanPlugin([env.target], {
         root: resolve('build'),
         verbose: true,
@@ -69,9 +73,6 @@ module.exports = env => {
         includeManifest: 'manifest',
         path: resolve('build', 'web')
       }),
-
-      new LodashModuleReplacementPlugin(),
-      new webpack.optimize.OccurrenceOrderPlugin(),
 
       new webpack.DefinePlugin({
         'process.env': {

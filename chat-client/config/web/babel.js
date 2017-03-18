@@ -26,7 +26,8 @@ module.exports = {
 
   plugins: [
     require.resolve('babel-plugin-lodash'),
-    require.resolve('babel-plugin-transform-object-rest-spread')
+    require.resolve('babel-plugin-transform-object-rest-spread'),
+    require.resolve('babel-plugin-transform-class-properties')
   ],
 
   presets: [
