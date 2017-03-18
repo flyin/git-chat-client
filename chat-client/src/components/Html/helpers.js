@@ -9,6 +9,7 @@ export const loadAssets = path => new Promise((resolve, reject) => fs.readFile(p
   if (err) {
     return reject(err);
   }
+
   return resolve(JSON.parse(data.toString()));
 }));
 

@@ -2,11 +2,13 @@ import React from 'react';
 import { join, resolve } from 'path';
 import express from 'express';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import { memoize } from 'lodash';
 import { getDataFromTree } from 'react-apollo';
 import createMemoryHistory from 'history/createMemoryHistory';
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
 
+import settings from 'settings';
 import App from 'App';
 import createStore from 'store';
 import { loadAssets, renderHtml } from 'components/Html';
@@ -17,11 +19,12 @@ const loadCachedAssets = __DEV__ ? loadAssets : memoize(loadAssets);
 
 const app = express();
 app.use(morgan('dev'));
+app.use(cookieParser());
 app.use('/static', express.static(webRoot));
 
 app.get('*', async (req, res) => {
   const assets = await loadCachedAssets(join(webRoot, 'webpack-assets.json'));
-  const networkInterface = createNetworkInterface({ uri: 'http://127.0.0.1' });
+  const networkInterface = createNetworkInterface({ uri: settings.urls.api });
 
   networkInterface.use([{
     applyMiddleware(apolloReq, done) {
@@ -29,7 +32,7 @@ app.get('*', async (req, res) => {
         apolloReq.options.headers = {};
       }
 
-      // req.options.headers.authorization = req.cookies.get('token');
+      req.options.headers.authorization = req.cookies.token;
       done();
     }
   }]);
