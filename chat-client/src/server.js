@@ -7,17 +7,16 @@ import { memoize } from 'lodash';
 import { getDataFromTree } from 'react-apollo';
 import createMemoryHistory from 'history/createMemoryHistory';
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
-
-import settings from 'settings';
 import App from 'App';
-import createStore from 'store';
 import { loadAssets, renderHtml } from 'components/Html';
 import Server from 'components/Server';
+import settings from 'settings';
+import createStore from 'store';
 
 const webRoot = resolve(__dirname, '..', 'web');
 const loadCachedAssets = __DEV__ ? loadAssets : memoize(loadAssets);
-
 const app = express();
+
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use('/static', express.static(webRoot));
