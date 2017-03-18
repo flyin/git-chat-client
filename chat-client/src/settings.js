@@ -9,7 +9,7 @@ const environment = {
   }
 }[process.env.NODE_ENV || 'development'];
 
-export default Object.assign({
+export default Object.assign({}, {
   urls: {
     api: `${process.env.API_URL}/graphql`,
     socket: process.env.API_URL
