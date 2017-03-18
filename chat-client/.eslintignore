@@ -1,0 +1,5 @@
+webpack*
+**/*.test.js
+**/__tests__/**
+config/**
+bin/dev-server.js

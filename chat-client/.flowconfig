@@ -1,0 +1,14 @@
+[ignore]
+<PROJECT_ROOT>/build/**/*
+<PROJECT_ROOT>/coverage/**/*
+<PROJECT_ROOT>/node_modules/enzyme-matchers/**/*
+<PROJECT_ROOT>/node_modules/fbjs/**/*
+<PROJECT_ROOT>/node_modules/jest-enzyme/**/*
+<PROJECT_ROOT>/node_modules/jest-validate/**/*
+
+[options]
+module.system.node.resolve_dirname=src
+module.system.node.resolve_dirname=node_modules
+
+[libs]
+./config/flow
