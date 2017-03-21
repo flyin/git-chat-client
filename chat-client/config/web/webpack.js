@@ -10,9 +10,6 @@ const port = process.env.WEBPACK_PORT || 3030;
 
 module.exports = env => {
   const isProduction = env.environment === 'production';
-  const addPlugin = (plugin, add) => add ? plugin : undefined;
-  const addProdPlugin = plugin => addPlugin(plugin, isProduction);
-  const addDevPlugin = plugin => addPlugin(plugin, !isProduction);
 
   return {
     cache: true,
@@ -96,19 +93,21 @@ module.exports = env => {
           }
         },
 
-        minimize: isProduction
+        minimize: isProduction,
+        debug: !isProduction
       }),
 
       new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: module => /node_modules/.test(module.resource) }),
       new webpack.optimize.CommonsChunkPlugin({ name: 'manifest', minChunks: Infinity }),
-      addDevPlugin(new webpack.HotModuleReplacementPlugin()),
-      addProdPlugin(new webpack.NoEmitOnErrorsPlugin()),
 
-      addProdPlugin(new webpack.optimize.UglifyJsPlugin({
-        compress: { warnings: false },
+      !isProduction && new webpack.HotModuleReplacementPlugin(),
+      isProduction && new webpack.NoEmitOnErrorsPlugin(),
+
+      isProduction && new webpack.optimize.UglifyJsPlugin({
+        compress: { warnings: false, screw_ie8: true },
         output: { comments: false },
-        sourceMap: true
-      })),
+        sourceMap: false
+      }),
     ].filter(i => !!i),
 
     resolve: {
