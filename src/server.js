@@ -1,3 +1,4 @@
+import 'isomorphic-fetch';
 import React from 'react';
 import { join, resolve } from 'path';
 import express from 'express';
