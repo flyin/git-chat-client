@@ -7,7 +7,7 @@ export default (initialData, history, client) => {
   const middleware = [thunk, routerMiddleware(history), client.middleware()];
 
   if (__DEV__ && __CLIENT__) {
-    const createLogger = require('redux-logger');
+    const createLogger = require('redux-logger').createLogger;
     middleware.push(createLogger({ collapsed: true }));
   }
 

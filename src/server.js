@@ -8,11 +8,11 @@ import { memoize } from 'lodash';
 import { getDataFromTree } from 'react-apollo';
 import createMemoryHistory from 'history/createMemoryHistory';
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
-import App from 'App';
-import { loadAssets, renderHtml } from 'components/Html';
-import Server from 'components/Server';
-import settings from 'settings';
-import createStore from 'store';
+import App, { actions as appActions } from './containers/App';
+import { loadAssets, renderHtml } from './components/Html';
+import Server from './components/Server';
+import settings from './settings';
+import createStore from './store';
 
 const webRoot = resolve(__dirname, '..', 'web');
 const loadCachedAssets = __DEV__ ? loadAssets : memoize(loadAssets);
@@ -32,18 +32,20 @@ app.get('*', async (req, res) => {
         apolloReq.options.headers = {};
       }
 
-      req.options.headers.authorization = req.cookies.token;
+      apolloReq.options.headers.authorization = req.cookies.token;
       done();
     }
   }]);
 
   const client = new ApolloClient({ networkInterface, ssrMode: true });
   const store = createStore({}, createMemoryHistory(), client);
+  store.dispatch(appActions.storeToken(req.cookies.token));
+
   const context = {};
   const html = <Server store={store} client={client} location={req.url} context={context}><App /></Server>;
 
   try {
-    await getDataFromTree(html, { isAuthenticated: true });
+    await getDataFromTree(html);
 
     if (context.url) {
       res.redirect(302, context.url);
@@ -52,7 +54,7 @@ app.get('*', async (req, res) => {
       res.send(renderHtml('', client.store, assets, html));
     }
   } catch (err) {
-    res.status(500).send({ error: err });
+    res.status(500).send(renderHtml('', client.store, assets));
   }
 });
 

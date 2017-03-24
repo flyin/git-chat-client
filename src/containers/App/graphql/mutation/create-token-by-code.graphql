@@ -1,0 +1,12 @@
+#import "../fragment/user.graphql"
+
+mutation githubLogin($code: String!) {
+  token: githubLogin(code: $code) {
+    user {
+      ...User
+    }
+    exp
+    iat
+    token
+  }
+}

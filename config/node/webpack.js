@@ -39,7 +39,7 @@ module.exports = env => {
 
       rules: [
         { enforce: 'pre', test: /\.js$/, loader: 'eslint-loader', exclude: /node_modules/ },
-
+        { test: /\.(graphql|gql)$/, exclude: /node_modules/, loader: 'graphql-tag/loader' },
         { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/, query: require('./babel') },
         { test: /\.(jpg|png)$/, loader: 'url-loader?emitFile=false&limit=10240', exclude: /node_modules/ },
         { test: /\.(woff|woff2|ttf|eot)$/, loader: 'url-loader?emitFile=false&limit=10240', exclude: /node_modules/ },

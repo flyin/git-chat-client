@@ -1,0 +1,12 @@
+fragment User on User {
+  _id
+  avatar
+  email
+  github {
+    _id
+    githubId
+    name
+    scopes
+  }
+  isAdmin
+}

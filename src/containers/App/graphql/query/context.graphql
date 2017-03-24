@@ -1,0 +1,19 @@
+#import "../fragment/user.graphql"
+
+query context($isAuthenticated: Boolean!) {
+  settings {
+    _id
+    github {
+      _id
+      clientId
+      redirectUri
+      responseType
+      scope
+      url
+    }
+  }
+
+  user: me @include(if: $isAuthenticated) {
+    ...User
+  }
+}
